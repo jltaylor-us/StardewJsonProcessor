@@ -45,10 +45,10 @@ namespace JsonProcessor.Test {
         }
 
         [TestMethod]
-        [DataRow("splice error 1", "[0]: can't splice content of type Object into a parent of type Array")]
-        [DataRow("splice error 2", "[0]: can't splice content of type Object into a parent of type Array")]
-        [DataRow("splice error 3", "foo: can't splice content of type Array into a parent of type Object")]
-        [DataRow("splice error 4", "$splice: can't splice content of type Array into an Object")]
+        [DataRow("splice error 1", "[0].$splice: can't splice content of type Object into a parent of type Array")]
+        [DataRow("splice error 2", "[0].content: can't splice content of type Object into a parent of type Array")]
+        [DataRow("splice error 3", "foo.$splice: can't splice content of type Array into a parent of type Object")]
+        [DataRow("splice error 4", "$splice: can't splice content of type Array into a parent of type Object")]
         [DataRow("splice error top level", ": The root node can't be a transformer")]
         public void TestSpliceErrors(string dataName, string expectedError) {
             LogCollector log = new();

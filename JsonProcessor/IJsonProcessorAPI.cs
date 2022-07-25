@@ -3,6 +3,8 @@
 // TODO: put license text here
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor
@@ -25,6 +27,11 @@ namespace JsonProcessor
         void AddPropertyTransformer(string name, Func<IJsonProcessor, JProperty, bool> transform, bool processArgumentFirst = true);
 
         void RemoveTransformer(string name);
+
+        void SetGlobalVariable(string name, JToken value);
+        void PushEnv(IDictionary<string, JToken> bindings);
+        void PopEnv();
+        bool TryApplyEnv(string name, [MaybeNullWhen(false)] out JToken value, [MaybeNullWhen(false)] out object foundInEnv);
     }
 
     public interface ITransformer {

@@ -11,8 +11,13 @@ namespace JsonProcessor.Framework {
         private readonly Dictionary<string, IShorthandTransformer> shorthandTransformers = new();
         private readonly Dictionary<string, IPropertyTransformer> propertyTransformers = new();
         private readonly Action<string, string> logError;
+
+        private readonly Env globalEnv;
+        private Env currentEnv;
+
         public JsonProcessorImpl(Action<string, string> logError) {
             this.logError = logError;
+            globalEnv = currentEnv = new Env();
         }
 
         /// <inheritdoc/>
@@ -116,6 +121,28 @@ namespace JsonProcessor.Framework {
             return result;
         }
 
+        public void SetGlobalVariable(string name, JToken value) {
+            globalEnv.bindings[name] = value;
+        }
+
+        public void PushEnv(IDictionary<string, JToken> bindings) {
+            currentEnv = currentEnv.Extend(bindings);
+        }
+
+        public void PopEnv() {
+            if (currentEnv.nextEnv is null) {
+                // this should be equivalent to curentEnv == globalEnv
+                // but this way plays nice with the nullable flow analysis
+                LogError("", "Transformer internal error: Tried to PopEnv more times than there were PushEnv");
+            } else {
+                currentEnv = currentEnv.nextEnv;
+            }
+        }
+
+        public bool TryApplyEnv(string name, [MaybeNullWhen(false)] out JToken value, [MaybeNullWhen(false)] out object foundInEnv) {
+            return currentEnv.TryApply(name, out value, out foundInEnv);
+        }
+
 
         // -----------------------------------
         // helper classes
@@ -200,19 +227,37 @@ namespace JsonProcessor.Framework {
     }
 
     internal class Env {
-        public Dictionary<string, JToken> bindings = new();
-        public Env? nextEnv = null;
+        public readonly Dictionary<string, JToken> bindings = new();
+        public readonly Env? nextEnv;
 
-        public bool TryApply(string name, [MaybeNullWhen(false)] out JToken value) {
+        public Env() {
+            nextEnv = null;
+        }
+
+        public Env(Env nextEnv) {
+            this.nextEnv = nextEnv;
+        }
+
+        public bool TryApply(string name, [MaybeNullWhen(false)] out JToken value, [MaybeNullWhen(false)] out object foundInEnv) {
             if (bindings.TryGetValue(name, out JToken? v)) {
                 value = v; // intermediate var necessary for the "nullable" flow analysis
+                foundInEnv = this;
                 return true;
             }
             if (nextEnv is not null) {
-                return nextEnv.TryApply(name, out value);
+                return nextEnv.TryApply(name, out value, out foundInEnv);
             }
             value = null;
+            foundInEnv = null;
             return false;
+        }
+
+        public Env Extend(IDictionary<string, JToken> bindings) {
+            Env extended = new(this);
+            foreach (var item in bindings) {
+                extended.bindings.Add(item.Key, item.Value);
+            }
+            return extended;
         }
     }
 }

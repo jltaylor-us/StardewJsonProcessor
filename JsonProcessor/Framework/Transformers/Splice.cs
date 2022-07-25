@@ -2,50 +2,26 @@
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
-    public class Splice : IShorthandTransformer, IPropertyTransformer
-    {
-        public string Name => "splice";
-        public string? ArgumentNameWhenLongForm => "content";
-        public bool ProcessArgumentFirst => true;
+    public class Splice : SpliceLikeBase {
+        public override string Name => "splice";
+        public override string? ArgumentNameWhenLongForm => "content";
 
-        public Splice() {
-        }
-
-        public void AddTo(IJsonProcessor processor) {
-            processor.AddShorthandTransformer(this);
-            processor.AddPropertyTransformer(this);
-        }
-
-        public bool TransformValue(IJsonProcessor processor, JObject nodeToReplace, JToken arg) {
-            if (nodeToReplace.Parent is null) {
-                // The processor should have already disallowed this, but check anyway
-                // because either we are paranoid or want to make the compiler's nullable check happy.
-                processor.LogError(nodeToReplace.Path, "can't splice at top level");
+        protected override bool ValidateArg(IJsonProcessor processor, JToken arg, JTokenType parentType) {
+            if (parentType != arg.Type) {
+                processor.LogError(arg.Path, $"can't splice content of type {arg.Type} into a parent of type {parentType}");
                 return false;
             }
-            if (nodeToReplace.Parent.Type == JTokenType.Property) {
-                if (arg.Type != JTokenType.Object) {
-                    processor.LogError(nodeToReplace.Path, $"can't splice content of type {arg.Type} into a parent of type Object");
-                    return false;
-                }
-                return SpliceIntoObject(processor, (JProperty)nodeToReplace.Parent, (JObject)arg);
-            }
-            // else splicing into Array
-            if (nodeToReplace.Parent.Type != arg.Type) {
-                processor.LogError(nodeToReplace.Path, $"can't splice content of type {arg.Type} into a parent of type {nodeToReplace.Parent.Type}");
-                return false;
-            }
-            nodeToReplace.AddAfterSelf(arg.Children());
-            nodeToReplace.Remove();
             return true;
         }
 
-        public bool TransformProperty(IJsonProcessor processor, JProperty theProperty) {
-            if (theProperty.Value.Type != JTokenType.Object) {
-                processor.LogError(theProperty.Path, $"can't splice content of type {theProperty.Value.Type} into an Object");
-                return false;
-            }
-            return SpliceIntoObject(processor, theProperty, (JObject)theProperty.Value);
+        protected override bool InObject(IJsonProcessor processor, JProperty parentProp, JToken arg) {
+            return SpliceIntoObject(processor, parentProp, (JObject)arg);
+        }
+
+        protected override bool InArray(IJsonProcessor processor, JObject nodeToReplace, JToken arg) {
+            nodeToReplace.AddAfterSelf(arg.Children());
+            nodeToReplace.Remove();
+            return true;
         }
 
         private bool SpliceIntoObject(IJsonProcessor processor, JProperty parentProp, JObject arg) {
@@ -71,6 +47,7 @@ namespace JsonProcessor.Framework.Transformers {
             }
             return result;
         }
+
     }
 }
 

@@ -1,0 +1,52 @@
+﻿// // Copyright 2022 Jamie Taylor
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+
+namespace JsonProcessor.Framework.Transformers {
+    public class Var : IShorthandTransformer {
+        private readonly Stack<Tuple<string, object>> lookupStack = new();
+        public Var() {
+        }
+
+        public string Name => "var";
+
+        public string? ArgumentNameWhenLongForm => "var";
+
+        public bool ProcessArgumentFirst => true;
+
+        public bool TransformValue(IJsonProcessor processor, JObject nodeToReplace, JToken arg) {
+            if (arg.Type != JTokenType.String) {
+                processor.LogError(arg.Path, "must be a string");
+                return false;
+            }
+            string name = arg.Value<string>()!;
+            if (processor.TryApplyEnv(name, out JToken? value, out object? foundInEnv)) {
+                var lookupStackObj = new Tuple<string, object>(name, foundInEnv);
+                if (lookupStack.Contains(lookupStackObj)) {
+                    // don't try to expand a reference that we're currently expanding (from the same env)
+                    return true;
+                }
+                JArray temp = new JArray(new Object[] { value });
+                lookupStack.Push(lookupStackObj);
+                bool result = processor.Transform(temp);
+                lookupStack.Pop();
+                if (temp.HasValues) {
+                    nodeToReplace.Replace(temp[0]);
+                } else {
+                    // shouldn't happen?
+                    nodeToReplace.Remove();
+                }
+                //nodeToReplace.Replace(value);
+                return result;
+            }
+            // not finding a value is not an error
+            return true;
+        }
+
+        public void AddTo(IJsonProcessor processor) {
+            processor.AddShorthandTransformer(this);
+        }
+    }
+}
+
