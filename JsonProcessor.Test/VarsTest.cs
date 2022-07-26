@@ -36,7 +36,11 @@ namespace JsonProcessor.Test {
 
         [TestMethod]
         [DataRow("define not obj", "[0].$define: must be an object")]
-        public void TestBadDefines(string dataName, string expectedError) {
+        [DataRow("var not string", "[0].$var: must be a string")]
+        [DataRow("let missing bindings", "[0]: missing required \"bindings\" property for let transformer")]
+        [DataRow("let missing body", "[0]: missing required \"body\" property for let transformer")]
+        [DataRow("let bad bindings", "[0].bindings: must be an object")]
+        public void TestErrors(string dataName, string expectedError) {
             JToken data = testData[dataName];
             bool result = AssertNoChanges("define error", processor, data);
             Assert.IsFalse(result, "transformer should return false");

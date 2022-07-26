@@ -34,6 +34,9 @@
   "define not obj": [
     { "$define": 3 }
   ],
+  "var not string": [
+    { "$var": 3 }
+  ],
   "var simple": [
     {
       "$define": { "x": 42 }
@@ -95,6 +98,27 @@
       "body": { "$var": "x" }
     }
   ],
-  "let as dynamic scope results": [ [ 7 ] ]
+  "let as dynamic scope results": [ [ 7 ] ],
+  "let missing bindings": [
+    {
+      "$transform": "let",
+      "body": { "$var": "y" }
+    }
+  ],
+  "let missing body": [
+    {
+      "$transform": "let",
+      "bindings": {
+        "y": 7
+      },
+    }
+  ],
+  "let bad bindings": [
+    {
+      "$transform": "let",
+      "bindings": 3,
+      "body": { "$var": "y" }
+    }
+  ]
 
 }
