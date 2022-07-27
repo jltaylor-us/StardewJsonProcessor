@@ -29,6 +29,7 @@
     <None Remove="TestData\processor-test.json" />
     <None Remove="TestData\string-join-test.json" />
     <None Remove="TestData\vars-test.json" />
+    <None Remove="TestData\for-each-test.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestData\" />
@@ -38,5 +39,6 @@
     <EmbeddedResource Include="TestData\processor-test.json" />
     <EmbeddedResource Include="TestData\string-join-test.json" />
     <EmbeddedResource Include="TestData\vars-test.json" />
+    <EmbeddedResource Include="TestData\for-each-test.json" />
   </ItemGroup>
 </Project>
