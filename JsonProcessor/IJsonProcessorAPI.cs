@@ -11,6 +11,7 @@ namespace JsonProcessor
 {
     public interface IJsonProcessorAPI
     {
+        IJsonProcessor NewProcessor(string errorLogPrefix, bool includeDefaultTransformers = true);
     }
 
     public interface IJsonProcessor {
