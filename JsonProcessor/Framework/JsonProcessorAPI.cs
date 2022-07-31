@@ -15,13 +15,17 @@ namespace JsonProcessor.Framework {
             JsonProcessorImpl result = new((path, msg) => {
                 Monitor.Log($"{errorLogPrefix} - ${path}: ${msg}", LogLevel.Error);
             });
-            new Define().AddTo(result);
-            new ForEach().AddTo(result);
-            new Let().AddTo(result);
-            new Splice().AddTo(result);
-            new StringJoin().AddTo(result);
-            new Var().AddTo(result);
+            AddDefaultProcessors(result);
             return result;
+        }
+
+        public static void AddDefaultProcessors(IJsonProcessor processor) {
+            new Define().AddTo(processor);
+            new ForEach().AddTo(processor);
+            new Let().AddTo(processor);
+            new Splice().AddTo(processor);
+            new StringJoin().AddTo(processor);
+            new Var().AddTo(processor);
         }
     }
 }

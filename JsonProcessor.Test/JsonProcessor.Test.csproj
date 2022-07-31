@@ -30,6 +30,9 @@
     <None Remove="TestData\string-join-test.json" />
     <None Remove="TestData\vars-test.json" />
     <None Remove="TestData\for-each-test.json" />
+    <None Remove="TestData\accessory.json" />
+    <None Remove="TestData\accessory-orig.json" />
+    <None Remove="TestData\accessory2.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestData\" />
@@ -40,5 +43,8 @@
     <EmbeddedResource Include="TestData\string-join-test.json" />
     <EmbeddedResource Include="TestData\vars-test.json" />
     <EmbeddedResource Include="TestData\for-each-test.json" />
+    <EmbeddedResource Include="TestData\accessory.json" />
+    <EmbeddedResource Include="TestData\accessory2.json" />
+    <EmbeddedResource Include="TestData\accessory-orig.json" />
   </ItemGroup>
 </Project>
