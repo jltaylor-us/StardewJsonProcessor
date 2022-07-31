@@ -12,7 +12,7 @@ namespace JsonProcessor.Framework.Transformers {
         }
         public abstract string Name { get; }
         public abstract string? ArgumentNameWhenLongForm { get; }
-        public bool ProcessArgumentFirst => true;
+        public abstract bool ProcessArgumentFirst { get; }
 
         public void AddTo(IJsonProcessor processor) {
             processor.AddShorthandTransformer(this);

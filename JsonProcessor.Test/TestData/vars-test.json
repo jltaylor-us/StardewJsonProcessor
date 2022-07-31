@@ -63,12 +63,13 @@
   ],
   "var co-rec": [
     {
-      "$define": {
+      "$transform": "let",
+      "bindings": {
         "x": [ { "$var": "y" } ],
         "y": [ { "$var": "x" } ]
-      }
-    },
-    { "$var": "x" }
+      },
+      "body": { "$var": "x" }
+    }
   ],
   "var co-rec results": [
     [ [ { "$var": "x" } ] ]

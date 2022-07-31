@@ -10,6 +10,7 @@ namespace JsonProcessor.Framework.Transformers {
     public class Splice : SpliceLikeBase {
         public override string Name => "splice";
         public override string? ArgumentNameWhenLongForm => "content";
+        public override bool ProcessArgumentFirst => true;
 
         protected override bool ValidateArg(IJsonProcessor processor, JToken arg, JTokenType parentType) {
             if (parentType != arg.Type) {
