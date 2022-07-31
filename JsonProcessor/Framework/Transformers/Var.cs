@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// The Var transformer provides variable lookup in the environment and replaces the JSON node with the result.
+    /// Results are recursively expanded (until the expansion runs in to a term it has already expanded from
+    /// the same environment).  An unbound variable (i.e., one not found in the environment) results in no changes
+    /// to the JSON node.
+    /// </summary>
     public class Var : IShorthandTransformer {
         private readonly Stack<Tuple<string, object>> lookupStack = new();
         public Var() {

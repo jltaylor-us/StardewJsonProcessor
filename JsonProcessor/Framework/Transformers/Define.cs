@@ -3,6 +3,10 @@ using System;
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// The Define transformer sets bindings in the global environment.  The Define node itself is removed
+    /// from the JSON tree.
+    /// </summary>
     public class Define : SpliceLikeBase {
         public override string Name => "define";
         public override string? ArgumentNameWhenLongForm => "bindings";

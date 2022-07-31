@@ -3,6 +3,9 @@ using System;
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// The Let transformer provides scoped bindings for the expansion of its body
+    /// </summary>
     public class Let : ITransformer {
         public Let() {
         }

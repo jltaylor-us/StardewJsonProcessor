@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// The ForEach transformer loops over a source array or object, repeatedly expanding its body with new
+    /// bindings of var.  The ForEach JSON node is replaced with an array containing the output.
+    /// The names of the required properties match the pronunciaion of this operation as
+    /// "for each VAR v IN source, YIELD body"
+    /// </summary>
     public class ForEach : ITransformer {
 
         public string Name => "for-each";

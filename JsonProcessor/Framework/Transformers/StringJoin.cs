@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// The StringJoin transformer joins an array of strings into one string (which replaces the transformer's
+    /// JSON node).
+    /// </summary>
     public class StringJoin : ITransformer, IShorthandTransformer {
         public string Name => "string-join";
         public bool ProcessChildrenFirst => true;

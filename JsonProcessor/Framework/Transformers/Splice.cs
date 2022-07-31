@@ -2,6 +2,11 @@
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// The Splice transformer inserts its argument objects into the surrounding context.
+    /// If the surrounding context is an array then the argument must be an array; if it is an object
+    /// then the argument must be an object.
+    /// </summary>
     public class Splice : SpliceLikeBase {
         public override string Name => "splice";
         public override string? ArgumentNameWhenLongForm => "content";

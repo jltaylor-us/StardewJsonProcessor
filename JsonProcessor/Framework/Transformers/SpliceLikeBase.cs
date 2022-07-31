@@ -3,6 +3,10 @@ using System;
 using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework.Transformers {
+    /// <summary>
+    /// A base class for transformers that splice things into the surrounding context.  (Note that "things" may
+    /// also be empty, effectively removing the node from the tree.)
+    /// </summary>
     public abstract class SpliceLikeBase : IShorthandTransformer, IPropertyTransformer {
         public SpliceLikeBase() {
         }

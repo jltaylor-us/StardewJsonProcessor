@@ -7,14 +7,23 @@ using Newtonsoft.Json.Linq;
 
 namespace JsonProcessor.Framework {
     public class JsonProcessorImpl : IJsonProcessor {
+
+        // the various types of transformers
         private readonly Dictionary<string, ITransformer> transformers = new();
         private readonly Dictionary<string, IShorthandTransformer> shorthandTransformers = new();
         private readonly Dictionary<string, IPropertyTransformer> propertyTransformers = new();
+
+        // our error logger
         private readonly Action<string, string> logError;
 
+        // the environment
         private readonly Env globalEnv;
         private Env currentEnv;
 
+        /// <summary>
+        /// Create a new processor
+        /// </summary>
+        /// <param name="logError">the error logging function</param>
         public JsonProcessorImpl(Action<string, string> logError) {
             this.logError = logError;
             globalEnv = currentEnv = new Env();
@@ -25,37 +34,45 @@ namespace JsonProcessor.Framework {
             logError(tokenPath, message);
         }
 
+        /// <inheritdoc/>
         public void AddTransformer(ITransformer transformer) {
             transformers.Add(transformer.Name, transformer);
         }
 
+        /// <inheritdoc/>
         public void AddTransformer(string name, Func<IJsonProcessor, JObject, bool> transform, bool processChildrenFirst = true) {
             AddTransformer(new GenericTransformer(name, transform, processChildrenFirst));
         }
 
+        /// <inheritdoc/>
         public void AddShorthandTransformer(IShorthandTransformer transformer) {
             shorthandTransformers.Add("$" + transformer.Name, transformer);
             if (transformer.ArgumentNameWhenLongForm is not null) AddTransformer(new LongFormWrapper(transformer));
         }
 
+        /// <inheritdoc/>
         public void AddShorthandTransformer(string name, string? argNameWhenLongForm, Func<IJsonProcessor, JObject, JToken, bool> transform, bool processArgumentFirst = true) {
             AddShorthandTransformer(new GenericShorthandTransformer(name, argNameWhenLongForm, transform, processArgumentFirst));
         }
 
+        /// <inheritdoc/>
         public void AddPropertyTransformer(IPropertyTransformer transformer) {
             propertyTransformers.Add("$" + transformer.Name, transformer);
         }
 
+        /// <inheritdoc/>
         public void AddPropertyTransformer(string name, Func<IJsonProcessor, JProperty, bool> transform, bool processArgumentFirst = true) {
             AddPropertyTransformer(new GenericPropertyTransformer(name, transform, processArgumentFirst));
         }
 
+        /// <inheritdoc/>
         public void RemoveTransformer(string name) {
             transformers.Remove(name);
             shorthandTransformers.Remove("$" + name);
             propertyTransformers.Remove("$" + name);
         }
 
+        /// <inheritdoc/>
         public bool Transform(JToken tok) {
             bool result = true;
             ITransformer? transformerToInvokeAfterChildren = null;
@@ -121,14 +138,17 @@ namespace JsonProcessor.Framework {
             return result;
         }
 
+        /// <inheritdoc/>
         public void SetGlobalVariable(string name, JToken value) {
             globalEnv.bindings[name] = value;
         }
 
+        /// <inheritdoc/>
         public void PushEnv(IDictionary<string, JToken> bindings) {
             currentEnv = currentEnv.Extend(bindings);
         }
 
+        /// <inheritdoc/>
         public void PopEnv() {
             if (currentEnv.nextEnv is null) {
                 // this should be equivalent to curentEnv == globalEnv
@@ -139,6 +159,7 @@ namespace JsonProcessor.Framework {
             }
         }
 
+        /// <inheritdoc/>
         public bool TryApplyEnv(string name, [MaybeNullWhen(false)] out JToken value, [MaybeNullWhen(false)] out object foundInEnv) {
             return currentEnv.TryApply(name, out value, out foundInEnv);
         }

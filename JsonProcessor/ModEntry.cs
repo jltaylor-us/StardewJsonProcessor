@@ -30,9 +30,6 @@ written to the console.
 
 File paths can be fully qualified or relative to the JsonProcessor mod folder.
 (Hint: file paths with spaces must be in double quotes.)";
-            //Monitor.Log($"helper path: {Helper.DirectoryPath}", LogLevel.Info);
-            //Monitor.Log($"PWD: {Directory.GetCurrentDirectory()}", LogLevel.Info);
-            //Monitor.Log($"Assembly Dir: {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}", LogLevel.Info);
             if (args.Length < 1 || args.Length > 2) {
                 Monitor.Log($"type \"{command} help\" for usage and help", LogLevel.Warn);
                 return;

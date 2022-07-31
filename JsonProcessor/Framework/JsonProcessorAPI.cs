@@ -10,6 +10,7 @@ namespace JsonProcessor.Framework {
             Monitor = monitor;
         }
 
+        /// <inheritdoc/>
         public IJsonProcessor NewProcessor(string errorLogPrefix, bool includeDefaultTransformers = true) {
             JsonProcessorImpl result = new((path, msg) => {
                 Monitor.Log($"{errorLogPrefix} - ${path}: ${msg}", LogLevel.Error);
