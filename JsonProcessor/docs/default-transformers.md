@@ -220,7 +220,7 @@ optional `delimiter` property:
   "strings": ["a", "b", "c"],
   "delimiter": ", "
 }
-```jsonc
+```
 
 or as a shorthand transformer:
 
