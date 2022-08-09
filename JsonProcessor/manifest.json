@@ -6,5 +6,8 @@
   "UniqueID": "jltaylor-us.JsonProcessor",
   "EntryDll": "JsonProcessor.dll",
   "MinimumApiVersion": "3.7.6", // last Android version
-  "UpdateKeys": [ "Nexus:13183", "GitHub:jltaylor-us/StardewJsonProcessor" ]
+  "UpdateKeys": [
+    "Nexus:13183",
+    // "GitHub:jltaylor-us/StardewJsonProcessor"
+  ]
 }

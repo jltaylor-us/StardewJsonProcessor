@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonProcessor", "JsonProces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonProcessor.Test", "JsonProcessor.Test\JsonProcessor.Test.csproj", "{199E538B-33E3-4CB8-BA02-F538F368C279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentPatcherJsonProcessor", "ContentPatcherJsonProcessor\ContentPatcherJsonProcessor.csproj", "{3D5EDC24-4AFF-4D68-81AF-401F0EC60AA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{199E538B-33E3-4CB8-BA02-F538F368C279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{199E538B-33E3-4CB8-BA02-F538F368C279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{199E538B-33E3-4CB8-BA02-F538F368C279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D5EDC24-4AFF-4D68-81AF-401F0EC60AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D5EDC24-4AFF-4D68-81AF-401F0EC60AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D5EDC24-4AFF-4D68-81AF-401F0EC60AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D5EDC24-4AFF-4D68-81AF-401F0EC60AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
