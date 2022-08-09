@@ -20,7 +20,6 @@ namespace ContentPatcherJsonProcessor {
             public readonly IMonitor Monitor;
             public readonly IJsonProcessorAPI JsonProcessorAPI;
             public readonly MethodInfo RawContentPack_TryReloadContent;
-            public readonly MethodInfo RawContentPack_ContentPack;
             public readonly MethodInfo ContentPack_GetFile;
             public readonly Type ContentConfigType;
             public readonly FieldInfo ContentPack_JsonHelper;
@@ -33,7 +32,6 @@ namespace ContentPatcherJsonProcessor {
                 IMonitor monitor,
                 IJsonProcessorAPI jsonProcessorAPI,
                 MethodInfo rawContentPack_TryReloadContent,
-                MethodInfo rawContentPack_ContentPack,
                 MethodInfo contentPack_GetFile,
                 Type contentConfigType,
                 FieldInfo contentPack_JsonHelper,
@@ -44,7 +42,6 @@ namespace ContentPatcherJsonProcessor {
                 Monitor = monitor;
                 JsonProcessorAPI = jsonProcessorAPI;
                 RawContentPack_TryReloadContent = rawContentPack_TryReloadContent;
-                RawContentPack_ContentPack = rawContentPack_ContentPack;
                 ContentPack_GetFile = contentPack_GetFile;
                 ContentConfigType = contentConfigType;
                 ContentPack_JsonHelper = contentPack_JsonHelper;
@@ -87,11 +84,6 @@ namespace ContentPatcherJsonProcessor {
                 Monitor.Log("couldn't get method ContentPatcher.Framework.RawContentPack:TryReloadContent", LogLevel.Debug);
                 return;
             }
-            MethodInfo? rawContentPack_ContentPack = AccessTools.PropertyGetter("ContentPatcher.Framework.RawContentPack:ContentPack");
-            if (rawContentPack_TryReloadContent is null) {
-                Monitor.Log("couldn't get property getter ContentPatcher.Framework.RawContentPack:ContentPack", LogLevel.Debug);
-                return;
-            }
             // sure wish this language supported macros right about now.
             MethodInfo? getFile = AccessTools.Method("StardewModdingAPI.Framework.ContentPack:GetFile");
             if (getFile is null) {
@@ -124,7 +116,6 @@ namespace ContentPatcherJsonProcessor {
                 monitor: Monitor,
                 jsonProcessorAPI: jsonProcessorAPI,
                 rawContentPack_TryReloadContent: rawContentPack_TryReloadContent,
-                rawContentPack_ContentPack: rawContentPack_ContentPack,
                 contentPack_GetFile: getFile,
                 contentConfigType: contentConfigType,
                 contentPack_JsonHelper: contentPack_JsonHelper,
@@ -147,12 +138,9 @@ namespace ContentPatcherJsonProcessor {
             if (sVars is null) {
                 throw new InvalidOperationException("code run before required initialization");
             }
-            int state = 0;
+            int state = 1;
             foreach (var instruction in instructions) {
-                if (state == 0 && instruction.Calls(sVars.RawContentPack_ContentPack)) {
-                    state = 1;
-                    yield return new CodeInstruction(OpCodes.Nop);
-                } else if (state == 1 && (instruction.operand as MethodInfo)?.Name == "ReadJsonFile") {
+                if (state == 1 && (instruction.operand as MethodInfo)?.Name == "ReadJsonFile") {
                     //SMonitor.Log($"TryReloadContentTranspile found target instruction: {instruction}", LogLevel.Info);
                     //SMonitor.Log($"  opcode {instruction.opcode}", LogLevel.Info);
                     //SMonitor.Log($"  operand {instruction.operand}", LogLevel.Info);
@@ -169,13 +157,12 @@ namespace ContentPatcherJsonProcessor {
             }
         }
 
-        private static object? ReadJsonFileReplacement(object inst, string path) {
+        private static object? ReadJsonFileReplacement(IContentPack contentPack, string path) {
             if (sVars is null) {
                 throw new InvalidOperationException("code run before required initialization");
             }
             // This is the expression we are replacing:
             // ContentPack.ReadJsonFile<ContentConfig> ("content.json");
-            IContentPack contentPack = (IContentPack)sVars.RawContentPack_ContentPack.Invoke(inst, null)!;
 
             // Keeping this extra code around in case I add features by having extra stuff in the manifest
             //SMonitor.Log($"mainfest extra fields: {contentPack.Manifest.ExtraFields}", LogLevel.Debug);
