@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <IgnoreModFilePatterns>Newtonsoft\.Json\.dll</IgnoreModFilePatterns>
   </PropertyGroup>
 
   <ItemGroup>

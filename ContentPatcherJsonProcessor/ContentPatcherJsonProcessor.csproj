@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <EnableHarmony>true</EnableHarmony>
+    <IgnoreModFilePatterns>Newtonsoft\.Json\.dll</IgnoreModFilePatterns>
   </PropertyGroup>
 
   <ItemGroup>
