@@ -30,5 +30,5 @@ Known limitations in the current version:
 
 * Transformers are applied only in `content.json`, not in any included files.
 * Not compatible with versions of Content Patcher before 1.21
-* New versions of Content Patcher (after 1.25.0, which was current when this mod was written) may or may not
+* New versions of Content Patcher (after 1.27.2, which was current when this mod was written) may or may not
   be compatible.
