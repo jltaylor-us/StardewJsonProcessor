@@ -1,5 +1,7 @@
+# Json Processor
+
 This mod is for other mod authors, and there is no reason for end users to install it unless
-required by another mod.
+required by another mod.  You can download it from [Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/13183).
 
 **Json Processor** transforms JSON trees using pluggable transformers.  It provides a CLI in the
 SMAPI console, as well as advanced APIs for changing the set of tranformers in use and for implementing
@@ -28,6 +30,12 @@ Json Processor also provides an API that you can invoke during the game (just li
 all you need is to transform a JSON tree using the default transformers, then use the [simple
 API](../IJsonProcessorSimpleAPI.cs).  The [full api](../IJsonProcessorAPI.cs) includes functions to add
 and remove transformers from the processor, as well as the interfaces for defining new transformers.
+
+## Use from a Content Patcher mod
+
+The [Content Patcher Json Processor](../../ContentPatcherJsonProcessor/) mod provides integration
+between Json Processor and Content Patcher so that you can write your `content.json` files with Json
+Processor transformers.  See that mod for more information.
 
 # Quick-start examples
 
