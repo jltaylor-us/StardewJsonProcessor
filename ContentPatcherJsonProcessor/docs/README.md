@@ -32,3 +32,9 @@ Known limitations in the current version:
 * Not compatible with versions of Content Patcher before 1.21
 * New versions of Content Patcher (after 1.27.2, which was current when this mod was written) may or may not
   be compatible.
+
+
+# See Also
+
+* [Release notes](release-notes.md)
+
